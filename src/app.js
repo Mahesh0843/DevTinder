@@ -7,7 +7,7 @@ app.use("/hello", (req, res) => {
 });
 
 app.use("/", (req, res) => {
-    res.send("hello");
+    res.send("hello world");
 });
 
 app.listen(7777, () => {
