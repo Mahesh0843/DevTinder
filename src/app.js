@@ -1,15 +1,23 @@
 const express = require("express");
+const connectDb=require("./config/database");
+const dotenv=require("dotenv");
+const app=express();
+const cookieparser=require("cookie-parser");
+dotenv.config();
 
-const app = express();
 
-app.use("/hello", (req, res) => {
-    res.send("hello from server");
-});
+app.use(express.json());
+app.use(cookieparser());
 
-app.use("/", (req, res) => {
-    res.send("hello world");
-});
-
-app.listen(7777, () => {
-    console.log("server is running");
-});
+connectDb()
+  .then(()=>{
+    console.log("Database connected!!");
+    console.log('Database URL:', process.env.DATABASE_URL);
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err)=>{
+    console.error("MongoDb connection failed!");
+  });
