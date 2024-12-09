@@ -8,7 +8,7 @@ exports.getRequests=async (req,res)=>{
         const loggedInUser=req.user;
         const connRequest= await ConnectionRequest.find({
             toUserId: loggedInUser._id,
-            // status: "interested", 
+            status: "interested", 
         }).populate("fromUserId", USER_SAFE_DATA);
         if(!connRequest)
         {
