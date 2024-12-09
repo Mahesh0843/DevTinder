@@ -4,8 +4,8 @@ const { default: isEmail } = require("validator/lib/isEmail");
 const { default: isURL } = require("validator/lib/isURL");
 
 const userSchema=new mongoose.Schema({
-    firstname:{
-        type: String;
+    firstName:{
+        type: String,
         required: true,
         trim: true,
         minLength: 4,
@@ -41,7 +41,6 @@ const userSchema=new mongoose.Schema({
      },
      age:{
         type: Number,
-        required: true,
         min: 18,
      },
      gender: {
@@ -53,7 +52,7 @@ const userSchema=new mongoose.Schema({
      },
      photoUrl :{
         type: String,
-        default: https://geographyandyou.com/images/user-profile.png,
+        default: "https://geographyandyou.com/images/user-profile.png",
         validate(v)
         {
             if(!validator.isURL(v))
@@ -70,7 +69,7 @@ const userSchema=new mongoose.Schema({
         type: [String],
      },
 },{
-    timestamps: true;
+    timestamps: true,
 });
 
 module.exports=mongoose.model("User",userSchema);

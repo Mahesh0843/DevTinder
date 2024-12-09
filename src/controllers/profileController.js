@@ -1,10 +1,13 @@
 const express=require("express");
+const User = require('../models/user');
 const {validateEditprofileData,validateinputs, validateloginpassword}=require("../utils/validations");
+const bcrypt=require("bcrypt");
 
 exports.profileview=async (req,res)=>{
     try{
-        const user = await User.findById(req.user).select('-password');
-        res.status(200).json(user);
+        const user = req.user;
+
+        res.send(user);
     }
     catch(err)
     {
@@ -34,27 +37,33 @@ exports.updateUserProfile = async(req,res)=>{
     }   
 };
 
-exports.updatePassword= async (req,res)=>{
-    const loginuser=req.user;
-    const { emailId, oldpassword, newPassword }=req.body;
-    try{
-        validateinputs(emailId,oldpassword,NewPassword);
-        const user = await User.findOne({ email: emailId });
+exports.updatePassword = async (req, res) => {
+    const loginuser = req.user;
+    const { emailId, oldpassword, newPassword } = req.body;
+
+    try {
+        validateinputs(emailId, oldpassword, newPassword);
+        const user = await User.findOne({ 
+            emailId: emailId });
+
         if (!user) {
             throw new Error("User not found.");
         }
+
         if (user.id !== loginuser.id) {
             return res.status(403).json({ message: "Unauthorized to update this password." });
         }
-        validateloginpassword(oldpassword,user.password);
+
+        validateloginpassword(oldpassword, user.password);
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
         user.password = hashedPassword;
+        
         await user.save();
+
         res.status(200).json({ message: "Password updated successfully." });
-        }
-    catch(err)
-    {
-        res.status(400).send("ERROR : ", err.message);
+    } catch (err) {
+        res.status(400).send("ERROR : " + err.message); // Fixed error handling
     }
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const {userAuth}=require("../middleware/auth");
-const connectionRequest=require("../models/ConnectionRequest");
 const User=require("../models/user");
+const ConnectionRequest = require("../models/ConnectionRequest");
 
 exports.connectionReq= async (req, res) => {
       try {
@@ -75,5 +75,5 @@ exports.requestReview= async (req, res) => {
       } catch (err) {
         res.status(400).send("ERROR: " + err.message);
       }
-    };
+};
   

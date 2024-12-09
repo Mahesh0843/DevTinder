@@ -4,6 +4,7 @@ const app=express();
 const {validatesignup,validateloginpassword}= require("../utils/validations");
 const User=require("../models/user");
 const bcrypt=require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.signup= async (req,res)=>{
     
@@ -31,7 +32,7 @@ exports.login= async (req,res)=>{
     {
         throw new Error("Invalid credentials");
     }
-    validateloginpassword(password,user.password);
+    await validateloginpassword(password, user.password);
     const token = jwt.sign({_id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.cookie("token",token,{
         expires: new Date(Date.now()+8*360000),

@@ -1,12 +1,11 @@
-const express=require("express");
-const router=express.Router();
+const express = require("express");
+const profileRouter = express.Router();
 
-const {profileview,updatePassword,updateUserProfile}=require("../controllers/profileController");
-const {userAuth}=require("../middleware/auth");
+const { profileview, updatePassword, updateUserProfile } = require("../controllers/profileController");
+const { userAuth } = require("../middleware/auth");
 
-router.get("/profile/view",userAuth,profileview);
-router.get("/profile/edit",userAuth,updateUserProfile);
-router.get("/profile/forgotpassword",updatePassword);
+profileRouter.get("/profile/view", userAuth, profileview);
+profileRouter.put("/profile/edit", userAuth, updateUserProfile);
+profileRouter.patch("/profile/update-password",userAuth, updatePassword);
 
-
-module.exports = profileRouter;
+module.exports = profileRouter; 

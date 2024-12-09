@@ -1,5 +1,5 @@
 const validator=require("validator");
-
+const bcrypt=require("bcrypt");
 exports.validatesignup=(req)=>{
     const {firstName,lastName,emailId,password}=req.body;
     if(!firstName || !lastName)
@@ -27,13 +27,15 @@ exports.validateEditprofileData=(req)=>{
         "about",
         "skills",
     ];
-    const isEditAllowed=Object.keys(req.body).every((f)=>
-    allowedEditFields.includes(f));
+    const isEditAllowed=Object.keys(req.body).every((key)=>
+    allowedEditFields.includes(key));
     return isEditAllowed;
 };
 
 exports.validateloginpassword= async (password,passwordHash) =>
 {
+    console.log("Provided Password:", password);
+    console.log("Stored Hash:", passwordHash);
     const isMatch = await bcrypt.compare(password, passwordHash);
     if(!isMatch)
     {
